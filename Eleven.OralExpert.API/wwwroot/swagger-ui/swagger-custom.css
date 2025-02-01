@@ -1,0 +1,4 @@
+﻿.swagger-ui .opblock-summary-description {
+    font-size: 18px !important; /* Aumente ou ajuste o tamanho conforme necessário */
+    font-weight: bold !important; /* Opcional, para deixar a fonte em negrito */
+}
