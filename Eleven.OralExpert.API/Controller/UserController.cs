@@ -5,6 +5,7 @@ using Eleven.OralExpert.Domain.Entities;
 using Eleven.OralExpert.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Eleven.OralExpert.API.Filters;
+using Eleven.OralExpert.Services.Validators;
 using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -46,84 +47,50 @@ public class UserController : ControllerBase
     )]
     public IActionResult Register([FromBody] UserRegisterDto request)
     {
-        if (!ModelState.IsValid)
+        var validator = new UserRegisterDtoValidator();
+        var validationResult = validator.Validate(request);
+
+        if (!validationResult.IsValid)
         {
-            var errors = ModelState.Values
-                .SelectMany(v => v.Errors)
-                .Select(e => e.ErrorMessage);
-
-            return BadRequest(new { Errors = errors });
+            return BadRequest(new { Errors = validationResult.Errors.Select(e => e.ErrorMessage) });
         }
-       
-        var existingUser = _userService.GetByEmail(request.Email);
-        if (existingUser != null)
+        try
         {
-            return BadRequest(new { Errors = new[] { "Email is already in use." } });
+            var userResponse = _userService.RegisterUser(request);
+
+            return Created("", new
+            {
+                Message = "User created successfully!",
+                User = userResponse
+            });
         }
-
-       
-        var hashedPassword = PasswordHasher.HashPassword(request.Password);
-        var user = new User(request.Name, request.Email, hashedPassword, Guid.Parse(_defaultClinicId));
-
-        _genericService.Add(user);
-
-        return Created("", new { Message = "User created successfully!" });
+        catch (Exception ex)
+        {
+            return BadRequest(new { Errors = new[] { ex.Message } });
+        }
     }
 
-    [HttpGet]
-    [Route("list")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<UserResponseDto>))]
+    [HttpGet("list")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResult<UserResponseDto>))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [Produces("application/json")]
     [SwaggerOperation(
-        Summary = "Lista todos os usuários",
-        Description = "Retorna uma lista paginada de usuários com filtros e ordenação."
+        Summary = "Lista usuários paginados",
+        Description = "Retorna uma lista paginada de usuários aplicando filtros"
     )]
-    public async Task<IActionResult> ListUsers(
-        [FromQuery] UserQueryFilter filters,
-        [FromQuery] int page = 1,
-        [FromQuery] int pageSize = 10,
-        [FromQuery] string orderBy = "Name"
-    )
+    public IActionResult ListUsers([FromQuery] UserQueryFilter filters, [FromQuery] int page = 1, [FromQuery] int pageSize = 10, [FromQuery] string orderBy = "Name")
     {
         try
         {
-            var query = _genericService.GetAllAsQueryable();
-            
-            query = query.Apply(filters);
-            
-            query = orderBy.ToLower() switch
-            {
-                "email" => query.OrderBy(u => u.Email),
-                "createdat" => query.OrderBy(u => u.CreatedAt),
-                _ => query.OrderBy(u => u.Name) 
-            };
-           
-            var pagedResult = await query
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
-           
-            var userDtos = pagedResult.Select(user => new UserResponseDto
-            {
-                Id = user.Id,
-                Name = user.Name,
-                Email = user.Email
-            });
-            
-            return Ok(new
-            {
-                CurrentPage = page,
-                PageSize = pageSize,
-                TotalCount = await query.CountAsync(),
-                Data = userDtos
-            });
+            var users = _userService.ListUsers(filters, page, pageSize, orderBy);
+            return Ok(users);
         }
         catch (Exception ex)
         {
             return StatusCode(500, new { Message = ex.Message });
         }
     }
+    
     
     [HttpPatch]
     [Route("update/{id:guid}")]
@@ -155,8 +122,5 @@ public class UserController : ControllerBase
             return BadRequest(new { Message = ex.Message });
         }
     }
-
-
-
     
 }

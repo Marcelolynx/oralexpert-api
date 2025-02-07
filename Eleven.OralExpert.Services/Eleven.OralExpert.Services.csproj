@@ -10,4 +10,8 @@
         <ProjectReference Include="..\Eleven.OralExpert.Infra\Eleven.OralExpert.Infra.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="AspNetCore.IQueryable.Extensions" Version="8.0.0" />
+    </ItemGroup>
+
 </Project>

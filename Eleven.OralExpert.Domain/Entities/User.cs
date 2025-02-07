@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Eleven.OralExpert.Core.Notifications;
+using Eleven.OralExpert.Domain.Enums;
 using Eleven.OralExpert.Domain.Validators;
 using ValidationResult = FluentValidation.Results.ValidationResult;
 
@@ -15,14 +16,32 @@ public class User : BaseEntity
     public Guid ClinicId { get; private set; }
     
     public Clinic Clinic { get; private set; }
+    
+    public Role Role { get; private set; }
+    
+    public Doctor? Doctor { get; private set; }
+    
+    public Employee? Employer { get; private set; }
+    
 
-    public User(string name, string email, string password,  Guid clinicId)
+    public User(string name, string email, string password, Guid clinicId, Role role, Doctor? doctor = null, Employee? employee = null)
     {
         Name = name;
         Email = email;
         Password = password;
         IsDeleted = false;
         ClinicId = clinicId;
+        Role = role;
+ 
+        if (role == Role.Doctor && doctor != null)
+        {
+            Doctor = doctor;
+        }
+ 
+        if (role == Role.Employee && employee != null)
+        {
+            Employer = employee;
+        }
 
         CreatedAtNow();
         Validate();

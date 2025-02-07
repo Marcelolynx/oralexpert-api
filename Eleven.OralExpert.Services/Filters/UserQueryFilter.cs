@@ -6,7 +6,7 @@ namespace Eleven.OralExpert.API.Filters;
 
 public class UserQueryFilter : ICustomQueryable
 {
-    [QueryOperator(Operator = WhereOperator.Contains)]
+    [QueryOperator(Operator = WhereOperator.Contains, CaseSensitive = false)]
     public string? Name { get; set; }
     
     [QueryOperator(Operator = WhereOperator.Equals)]

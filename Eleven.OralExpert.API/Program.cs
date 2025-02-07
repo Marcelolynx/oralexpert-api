@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using Eleven.OralExpert.API.Configurations;
+using Eleven.OralExpert.API.DTOs;
 using Eleven.OralExpert.API.Middlewares;
 using Eleven.OralExpert.API.Utilities;
 using Eleven.OralExpert.API.Validators;
@@ -9,6 +10,8 @@ using Eleven.OralExpert.Infra.Repository;
 using Eleven.OralExpert.Services;
 using Eleven.OralExpert.Services.Interfaces;
 using Eleven.OralExpert.Services.Services;
+using Eleven.OralExpert.Services.Validators;
+using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -42,6 +45,7 @@ builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepositor
 builder.Services.AddScoped(typeof(IGenericService<>), typeof(GenericService<>));
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IValidator<UserRegisterDto>, UserRegisterDtoValidator>();
 
 
 
