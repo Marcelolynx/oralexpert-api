@@ -40,6 +40,12 @@
     </ItemGroup>
 
     <ItemGroup>
+        <None Update="appsettings.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
+    <ItemGroup>
       <ProjectReference Include="..\Eleven.OralExpert.Infra\Eleven.OralExpert.Infra.csproj" />
       <ProjectReference Include="..\Eleven.OralExpert.Services\Eleven.OralExpert.Services.csproj" />
     </ItemGroup>

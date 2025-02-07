@@ -1,25 +1,30 @@
-﻿using Eleven.OralExpert.Core.Notifications;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using System.IO;
+using Eleven.OralExpert.Core.Notifications;
 using Eleven.OralExpert.Domain.Entities;
-using Eleven.OralExpert.Infra.Map;
-using Microsoft.EntityFrameworkCore;
 
-namespace Eleven.OralExpert.Infra.Data;
-
-public class AppDbContext : DbContext
+namespace Eleven.OralExpert.Infra.Data
 {
-    public DbSet<User> Users { get; set; }
-    public DbSet<Clinic> Clinics { get; set; }
-
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options){}
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    public class AppDbContext : DbContext
     {
-        base.OnModelCreating(modelBuilder);
-        
-        modelBuilder.Entity<User>().HasQueryFilter(u => !u.IsDeleted);
+        public DbSet<User> Users { get; set; }
+        public DbSet<Clinic> Clinics { get; set; }
+        public DbSet<Doctor> Doctors { get; set; }
+        public DbSet<Employee> Employees { get; set; }
 
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
-        
-        modelBuilder.Ignore<DomainNotification>();
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        { }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+ 
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+ 
+            modelBuilder.Ignore<DomainNotification>();
+        }
     }
 }

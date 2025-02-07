@@ -32,14 +32,15 @@ builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.Converters.Add(new DateTimeAPIConverter());
-        options.JsonSerializerOptions.PropertyNamingPolicy = null; 
-        options.JsonSerializerOptions.WriteIndented = true; 
+        options.JsonSerializerOptions.PropertyNamingPolicy = null;
+        options.JsonSerializerOptions.WriteIndented = true;
     })
     .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<UserResponseDtoValidator>());
 
+// Adicionando a configuração de DbContext
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
+);
 
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped(typeof(IGenericService<>), typeof(GenericService<>));
@@ -47,22 +48,17 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IValidator<UserRegisterDto>, UserRegisterDtoValidator>();
 
-
-
-
 var app = builder.Build();
 app.UseStaticFiles();
 
 if (app.Environment.IsDevelopment())
 {
-    
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-
 app.UseMiddleware<ExceptionMiddleware>();
-app.UseSerilogRequestLogging(); 
+app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
 app.UseAuthorization();

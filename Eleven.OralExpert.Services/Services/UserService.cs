@@ -1,8 +1,10 @@
 ﻿using AspNetCore.IQueryable.Extensions;
+using AutoMapper;
 using Eleven.OralExpert.API.DTOs;
 using Eleven.OralExpert.API.Filters;
 using Eleven.OralExpert.Core.Utilities;
 using Eleven.OralExpert.Domain.Entities;
+using Eleven.OralExpert.Domain.Factories;
 using Eleven.OralExpert.Infra.Interfaces;
 using Eleven.OralExpert.Services.Interfaces;
 using Microsoft.Extensions.Configuration;
@@ -12,11 +14,13 @@ public class UserService : GenericService<User>, IUserService
 {
     private readonly IUserRepository _userRepository;
     private readonly string _defaultClinicId;
+    private readonly IMapper _mapper;
 
-    public UserService(IUserRepository userRepository, IConfiguration configuration) : base(userRepository)
+    public UserService(IUserRepository userRepository, IConfiguration configuration, IMapper mapper) : base(userRepository)
     {
         _userRepository = userRepository;
         _defaultClinicId = configuration["DefaultClinicId"];
+        _mapper = mapper;
     }
 
 
@@ -27,17 +31,13 @@ public class UserService : GenericService<User>, IUserService
             throw new Exception("Email já está em uso");
 
         var hashedPassword = PasswordHasher.HashPassword(request.Password);
-        var user = new User(request.Name, request.Email, hashedPassword, Guid.Parse(_defaultClinicId));
+        var user = UserFactory.CreateUser(request.Name, request.Email, hashedPassword, Guid.Parse(_defaultClinicId), request.Role);
         
         Add(user);
 
-        return new UserResponseDto
-        {
-            Id = user.Id,
-            Name = user.Name,
-            Email = user.Email,
-            IsDeleted = user.IsDeleted
-        };
+        var userResponseDto = _mapper.Map<UserResponseDto>(user);
+        
+        return userResponseDto;
     }
 
     public PagedResult<UserResponseDto> ListUsers(UserQueryFilter filters, int page, int pageSize, string orderBy)

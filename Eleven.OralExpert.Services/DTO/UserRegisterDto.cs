@@ -1,8 +1,11 @@
-﻿namespace Eleven.OralExpert.API.DTOs;
+﻿using Eleven.OralExpert.Domain.Enums;
+
+namespace Eleven.OralExpert.API.DTOs;
 
 public class UserRegisterDto
 {
     public string Name { get; set; }
     public string Email { get; set; }
     public string Password { get; set; }
+    public Role Role { get; set; }
 }

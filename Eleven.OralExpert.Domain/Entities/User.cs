@@ -23,6 +23,7 @@ public class User : BaseEntity
     
     public Employee? Employer { get; private set; }
     
+    public User(){}
 
     public User(string name, string email, string password, Guid clinicId, Role role, Doctor? doctor = null, Employee? employee = null)
     {
