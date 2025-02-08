@@ -12,5 +12,5 @@ public class ClinicResponseDto
     public string Cnpj { get; set; }
     public string Email { get; set; }
     public string ResponsavelTecnico { get; set; }
-    public TipoPessoa TipoPessoa { get; set; }
+    public PersonType PersonType { get; set; }
 }

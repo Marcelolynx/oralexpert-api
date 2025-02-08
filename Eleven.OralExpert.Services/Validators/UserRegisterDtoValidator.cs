@@ -1,4 +1,5 @@
 ﻿using Eleven.OralExpert.API.DTOs;
+using Eleven.OralExpert.Services.DTOs;
 using FluentValidation;
 
 namespace Eleven.OralExpert.Services.Validators;

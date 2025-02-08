@@ -2,7 +2,7 @@
 using AspNetCore.IQueryable.Extensions.Attributes;
 using AspNetCore.IQueryable.Extensions.Filter;
 
-namespace Eleven.OralExpert.API.Filters;
+namespace Eleven.OralExpert.Services.Filters;
 
 public class UserQueryFilter : ICustomQueryable
 {

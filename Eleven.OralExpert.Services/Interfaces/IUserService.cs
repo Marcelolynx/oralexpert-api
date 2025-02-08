@@ -1,6 +1,7 @@
 ﻿using Eleven.OralExpert.API.DTOs;
-using Eleven.OralExpert.API.Filters;
 using Eleven.OralExpert.Domain.Entities;
+using Eleven.OralExpert.Services.DTOs;
+using Eleven.OralExpert.Services.Filters;
 
 namespace Eleven.OralExpert.Services.Interfaces;
 

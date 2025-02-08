@@ -1,11 +1,18 @@
-﻿namespace Eleven.OralExpert.Domain.Entities;
+﻿using Eleven.OralExpert.Domain.Enums;
 
-public class Doctor
+namespace Eleven.OralExpert.Domain.Entities;
+
+public class Doctor : User
 {
-    public Guid Id { get; set; }
-    public Guid UserId { get; set; } // Referência ao usuário do sistema
-    public User User { get; set; }
-    public string CRO { get; set; } // Número do conselho regional de Odontologia opcional
+    public string CRO { get; private set; }
+    public string Specialty { get; private set; }
 
-    public string Especialidade { get; set; } // Exemplo: Ortodontia, Implantodontia
+    private Doctor() { } // Construtor protegido para o EF Core
+
+    public Doctor(string name, string email, string password, Guid clinicId, Address address, string cro, string specialty)
+        : base(name, email, password, clinicId, Role.Doctor, address) // 🔥 Agora Role.Doctor está explícito!
+    {
+        CRO = string.IsNullOrWhiteSpace(cro) ? throw new ArgumentException("CRO não pode ser vazio.") : cro;
+        Specialty = string.IsNullOrWhiteSpace(specialty) ? throw new ArgumentException("Especialidade não pode ser vazia.") : specialty;
+    }
 }

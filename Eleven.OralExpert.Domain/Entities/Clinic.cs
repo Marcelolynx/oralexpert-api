@@ -4,41 +4,44 @@ namespace Eleven.OralExpert.Domain.Entities;
 
 public class Clinic : BaseEntity
 {
-    public TipoPessoa TipoPessoa { get; private set; }
-    public string NomeMarca { get; private set; }
-    public string RazaoSocial { get; private set; }
-    public string Endereco { get; private set; }
-    public string Telefone { get; private set; }
-    public string Logomarca { get; private set; }
+    public PersonType PersonType { get; private set; }
+    public string BrandName { get; private set; }
+    public string CorporateName  { get; private set; }
+    public Address Address  { get; private set; }
+    public string Phone  { get; private set; }
+    public string Logo  { get; private set; }
     public string Cnpj { get; private set; }
     public string Email { get; private set; }
-    public string ResponsavelTecnico { get; private set; }
+    public string TechnicalManager  { get; private set; }
 
+    
+    public Clinic(){}
 
-    public Clinic(TipoPessoa tipoPessoa, string nomeMarca, string razaoSocial, string endereco, string telefone, string logomarca,
-        string cnpj, string email, string responsavelTecnico)
+    public Clinic(PersonType personType, string brandName, string corporateName, Address address, 
+        string phone, string logo, string cnpj, string email, string technicalManager)
     {
-        TipoPessoa = tipoPessoa;
-        NomeMarca = nomeMarca;
-        RazaoSocial = razaoSocial;
-        Endereco = endereco;
-        Telefone = telefone;
-        Logomarca = logomarca;
+        PersonType = personType;
+        BrandName = brandName;
+        CorporateName = corporateName;
+        Address = address;
+        Phone = phone;
+        Logo = logo;
         Cnpj = cnpj;
         Email = email;
-        ResponsavelTecnico = responsavelTecnico;
+        TechnicalManager = technicalManager;
         CreatedAtNow();
     }
     
-    public void AtualizarDados(string nomeMarca, string razaoSocial, string endereco, string telefone, string logomarca, string email, string responsavelTecnico)
+    public void UpdateData(string brandName, string corporateName, Address address, 
+        string phone, string logo, string email, string technicalManager)
     {
-        NomeMarca = nomeMarca;
-        RazaoSocial = razaoSocial;
-        Endereco = endereco;
-        Telefone = telefone;
-        Logomarca = logomarca;
+        BrandName = brandName;
+        CorporateName = corporateName;
+        Address = address;
+        Phone = phone;
+        Logo = logo;
         Email = email;
-        ResponsavelTecnico = responsavelTecnico;
+        TechnicalManager = technicalManager;
         UpdatedAtNow(); // Atualiza a data de modificação
     }
     

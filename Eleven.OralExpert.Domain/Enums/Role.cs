@@ -2,7 +2,9 @@
 
 public enum Role
 {
-    Admin,
-    Employee,
-    Doctor
+    Admin = 1,
+    Doctor = 2,
+    Employee = 3,
+    Patient = 4,
+    Root = 11
 }

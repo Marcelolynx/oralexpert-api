@@ -2,5 +2,6 @@
 
 public class DoctorCreateDto
 {
-    
+    public string CRO { get; set; }
+    public string Specialty { get; set; }
 }

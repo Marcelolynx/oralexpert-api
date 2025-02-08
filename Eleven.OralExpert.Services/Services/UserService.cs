@@ -1,11 +1,12 @@
 ﻿using AspNetCore.IQueryable.Extensions;
 using AutoMapper;
 using Eleven.OralExpert.API.DTOs;
-using Eleven.OralExpert.API.Filters;
 using Eleven.OralExpert.Core.Utilities;
 using Eleven.OralExpert.Domain.Entities;
 using Eleven.OralExpert.Domain.Factories;
 using Eleven.OralExpert.Infra.Interfaces;
+using Eleven.OralExpert.Services.DTOs;
+using Eleven.OralExpert.Services.Filters;
 using Eleven.OralExpert.Services.Interfaces;
 using Microsoft.Extensions.Configuration;
 
@@ -31,7 +32,8 @@ public class UserService : GenericService<User>, IUserService
             throw new Exception("Email já está em uso");
 
         var hashedPassword = PasswordHasher.HashPassword(request.Password);
-        var user = UserFactory.CreateUser(request.Name, request.Email, hashedPassword, Guid.Parse(_defaultClinicId), request.Role);
+        var address = new Address(request.Street, request.Neighborhood, request.City, request.ZipCode, request.State);
+        var user = UserFactory.CreateUser(request.Name, request.Email, hashedPassword, Guid.Parse(_defaultClinicId), request.Role, address);
         
         Add(user);
 

@@ -1,10 +1,17 @@
-﻿namespace Eleven.OralExpert.Domain.Entities;
+﻿using Eleven.OralExpert.Domain.Enums;
 
-public class Employee
+namespace Eleven.OralExpert.Domain.Entities;
+
+public class Employee : User
 {
-    public Guid Id { get; set; }
-    public Guid UserId { get; set; } // Referência ao usuário do sistema
-    public User User { get; set; }
+    public string Position { get; private set; }
+    public decimal Salary { get; private set; }
 
-    public string Position { get; set; } // Exemplo: Recepcionista, Gerente
+    private Employee() { } // Construtor protegido para o EF Core
+
+    public Employee(string name, string email, string password, Guid clinicId, Address address, string position, decimal salary)
+        : base(name, email, password, clinicId, Role.Employee, address) // 🔥 Chama o construtor do User
+    {
+        Position = string.IsNullOrWhiteSpace(position) ? throw new ArgumentException("Cargo não pode ser vazio.") : position;
+    }
 }
