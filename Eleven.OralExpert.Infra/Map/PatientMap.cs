@@ -1,17 +1,17 @@
+﻿using Eleven.OralExpert.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Eleven.OralExpert.Domain.Entities;
 
 namespace Eleven.OralExpert.Infra.Map;
-public class EmployeeMap : IEntityTypeConfiguration<Employee>
-{
-    public void Configure(EntityTypeBuilder<Employee> builder)
-    {
-         
 
-        builder.Property(e => e.Position)
+public class PatientMap : IEntityTypeConfiguration<Patient>
+{
+    public void Configure(EntityTypeBuilder<Patient> builder)
+    {
+       
+        builder.Property(p => p.MedicalRecord)
             .IsRequired()
-            .HasMaxLength(100);
+            .HasMaxLength(500); 
         
         builder.OwnsOne(u => u.Address, address =>
         {
@@ -21,6 +21,5 @@ public class EmployeeMap : IEntityTypeConfiguration<Employee>
             address.Property(a => a.ZipCode).HasColumnName("ZipCode").HasMaxLength(20);
             address.Property(a => a.State).HasColumnName("State").HasMaxLength(50);
         });
- 
     }
 }

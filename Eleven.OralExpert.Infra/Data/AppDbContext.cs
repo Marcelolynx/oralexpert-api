@@ -12,7 +12,6 @@ namespace Eleven.OralExpert.Infra.Data
         public DbSet<Clinic> Clinics { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<Employee> Employees { get; set; }
-        public DbSet<Address> Addresses { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 

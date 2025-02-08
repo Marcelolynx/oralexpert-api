@@ -10,35 +10,22 @@ public class ClinicMap : IEntityTypeConfiguration<Clinic>
     {
         builder.HasKey(c => c.Id);
 
-        builder.Property(c => c.TipoPessoa)
-            .IsRequired();
+        builder.Property(c => c.BrandName)
+            .IsRequired()
+            .HasMaxLength(100);
 
-        builder.Property(c => c.NomeMarca)
+        builder.Property(c => c.CorporateName)
             .IsRequired()
             .HasMaxLength(150);
 
-        builder.Property(c => c.RazaoSocial)
-            .HasMaxLength(150);
-
-        builder.Property(c => c.Endereco)
-            .HasMaxLength(250);
-        
-        builder.Property(c => c.Telefone) 
-            .IsRequired()
-            .HasMaxLength(15);
-
-        builder.Property(c => c.Logomarca)
-            .HasMaxLength(250); 
-
-        builder.Property(c => c.Cnpj)
-            .HasMaxLength(14)
-            .IsRequired();
-
-        builder.Property(c => c.Email)
-            .HasMaxLength(100)
-            .IsRequired();
-
-        builder.Property(c => c.ResponsavelTecnico)
-            .HasMaxLength(150); 
-    }   
+        // 🔥 Address como Owned Entity
+        builder.OwnsOne(c => c.Address, address =>
+        {
+            address.Property(a => a.Street).HasColumnName("Street").HasMaxLength(150);
+            address.Property(a => a.Neighborhood).HasColumnName("Neighborhood").HasMaxLength(100);
+            address.Property(a => a.City).HasColumnName("City").HasMaxLength(100);
+            address.Property(a => a.ZipCode).HasColumnName("ZipCode").HasMaxLength(20);
+            address.Property(a => a.State).HasColumnName("State").HasMaxLength(50);
+        });
+    }
 }

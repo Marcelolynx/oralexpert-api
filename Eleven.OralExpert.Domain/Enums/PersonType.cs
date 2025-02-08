@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 namespace Eleven.OralExpert.Domain.Enums;
 
 [JsonConverter(typeof(JsonStringEnumConverter))]
-public enum TipoPessoa
+public enum PersonType
 {
     [EnumMember(Value = "Pessoa Física")]
     Fisica,
