@@ -7,15 +7,45 @@ public class DoctorMap : IEntityTypeConfiguration<Doctor>
 {
     public void Configure(EntityTypeBuilder<Doctor> builder)
     {
-       
-        
-        builder.Property(d => d.CRO)
-            .HasMaxLength(20)
-            .IsRequired(false);
+        builder.ToTable("Doctors");
 
-        builder.Property(d => d.Specialty)
+        builder.HasKey(d => d.Id);
+
+        builder.Property(d => d.Name)
             .IsRequired()
             .HasMaxLength(100);
+
+        builder.Property(d => d.LastName) // 🔥 Adicionado LastName
+            .IsRequired()
+            .HasMaxLength(100);
+
+        builder.Property(d => d.Email)
+            .IsRequired()
+            .HasMaxLength(150);
+
+        builder.Property(d => d.Password)
+            .IsRequired()
+            .HasMaxLength(255);
+
+        builder.Property(d => d.BoardCode) // 🔥 CRM, CRO, etc.
+            .IsRequired()
+            .HasMaxLength(10);
+
+        builder.Property(d => d.BoardNumber) // 🔥 Número do registro profissional
+            .IsRequired()
+            .HasMaxLength(50);
+
+        builder.Property(d => d.BoardState) // 🔥 Estado da licença
+            .IsRequired()
+            .HasMaxLength(2);
+
+        builder.Property(d => d.SpecialtyId) // 🔥 Relacionamento com Especialidade
+            .IsRequired();
+
+        builder.HasOne(d => d.Clinic) // 🔥 Relacionamento com a Clínica
+            .WithMany()
+            .HasForeignKey(d => d.ClinicId)
+            .OnDelete(DeleteBehavior.Restrict);
         
         builder.OwnsOne(u => u.Address, address =>
         {
